@@ -891,32 +891,6 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
 /*-- First compute an optimum initial guess for the positions of components */
       if (npsf>1)
         {
-/*---- Subtract previously fitted components */
-          d = data2;
-          dh = datah;
-          for (p=npix; p--;)
-            *(d++) = (double)*(dh++);
-          for (j=0; j<npsf-1; j++)
-            {
-              d = data2;
-              ps = psfmasks[j];
-              for (p=npix; p--;)
-                *(d++) -= flux[j]**(ps++);
-            }
-          convolve_image(field, data2, data3, width,height);
-/*---- Ignore regions too close to stellar cores */
-          for (j=0; j<npsf-1; j++)
-            {
-              d = data3;
-              dy = -((double)(height/2)+deltay[j]);
-              for (y=height; y--; dy += 1.0)
-                {
-                  dx = -((double)(width/2)+deltax[j]);
-                  for (x=width; x--; dx+= 1.0, d++)
-                    if (dx*dx+dy*dy<r2)
-                      *d = -BIG;
-                }
-            }
           deltax[npsf-1] = thepsfit->x[npsf-1]-ix-1;
           deltay[npsf-1] = thepsfit->y[npsf-1]-iy-1;
         }
