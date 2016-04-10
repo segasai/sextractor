@@ -758,7 +758,8 @@ void	endobject(picstruct *field, picstruct *dfield, picstruct *wfield,
         if (FLAG(obj2.poserrmx2w_psf))
           astrom_psferrparam(field, obj);
         if (FLAG(obj2.flux_psf))
-          obj2->flux_psf = thepsfit->flux[j]>0.0? thepsfit->flux[j]:0.0; /*?*/
+          obj2->flux_psf = thepsfit->flux[j];
+          //>0.0? thepsfit->flux[j]:0.0; /*?*/
         if (FLAG(obj2.mag_psf))
           obj2->mag_psf = thepsfit->flux[j]>0.0?
 		prefs.mag_zeropoint -2.5*log10(thepsfit->flux[j]) : 99.0;

@@ -968,19 +968,17 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
                    //  kill++;             
 //                 } 
         }
-      if (npsfflag)
-        {
-/*--- If we reach this point we know the data are worth backuping */
-          for (j=0; j<npsf; j++)
-            {
-              deltaxb[j] = deltax[j];
-              deltayb[j] = deltay[j];
-              fluxb[j] = flux[j];
-              fluxerrb[j]=fluxerr[j];
-            }
-        }
     }
-  npsf=npsf-1-kill;
+    npsf = npsf0;
+    for (j=0; j<npsf; j++)
+      {
+        deltaxb[j] = deltax[j];
+        deltayb[j] = deltay[j];
+        fluxb[j] = flux[j];
+        fluxerrb[j]=fluxerr[j];
+        //fprintf(stderr, "%f %d %d %d\n", flux[j],j,npsf,npsf0);
+      }
+
 
 /* Now keep only fitted stars that fall within the current detection area */
   i = 0;
@@ -988,10 +986,6 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
     {      
       x = (int)(deltaxb[j]+0.4999)+width/2;
       y = (int)(deltayb[j]+0.4999)+height/2;
-      if (x<0 || x>=width || y<0 || y>=height)
-        continue;
-      if (weight[y*width+x] < 1/BIG)
-        continue;
 //      if (10*fluxb[j]<fluxb[0] )
 //        continue;
 //      if (fluxb[j]<=0 )
@@ -1006,7 +1000,6 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
       fluxerr[i++] = fluxerrb[j];
     }
 
-  npsf = i;
 
   /* Compute chi2 if asked to 
   if (FLAG(obj2.chi2_psf))
