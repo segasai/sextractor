@@ -781,11 +781,10 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
  
   /* Initialize outputs */
   thepsfit->niter = 0;
-//  thepsfit->npsf = 0;
-  for (j=0; j<npsfmax; j++) 
+  npsf0 = thepsfit-> npsf;
+
+  for (j=0; j<npsf0; j++) 
     {
-//      thepsfit->x[j] = obj2->posx;
-//      thepsfit->y[j] = obj2->posy;
       thepsfit->flux[j] = 0.0;
       thepsfit->fluxerr[j] = 0.0;
     }
@@ -880,11 +879,9 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
   npsfflag = 1;
   r2 = psf_fwhm*psf_fwhm/2.0;
   //fluxb[0] = fluxerrb[0] = deltaxb[0] = deltayb[0] = 0.0;
-  npsf0 = thepsfit-> npsf;
   //for (npsf=1; npsf<=npsfmax && npsfflag; npsf++)
   for (npsf=1; npsf<=npsf0; npsf++)
     {
-      kill=0;
 /*-- First compute an optimum initial guess for the positions of components */
       if (npsf>1)
         {
@@ -914,19 +911,14 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
                       *d = -BIG;
                 }
             }
-//          deltax[npsf-1] = (double)(xmax - width/2);
-//          deltay[npsf-1] = (double)(ymax - height/2);
           deltax[npsf-1] = thepsfit->x[npsf-1]-ix-1;
           deltay[npsf-1] = thepsfit->y[npsf-1]-iy-1;
         }
       else
         {
 /*---- Only one component to fit: simply use the barycenter as a guess */
-          //deltax[npsf-1] = obj->mx - ix;
-          //deltay[npsf-1] = obj->my - iy;
           deltax[npsf-1] = thepsfit->x[npsf-1]-ix-1;
           deltay[npsf-1] = thepsfit->y[npsf-1]-iy-1;
-
         }
 
       niter = 0;
@@ -959,14 +951,6 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
         {
 /*---- First, the error on the flux estimate */      
           fluxerr[j] = sqrt(*var)>0.0?  sqrt(*var):999999.0;
-          //if (flux[j]<12*fluxerr && j>0)
-          //  npsfmax--,flux[j]=0;
-//          if (flux[j]<12*fluxerr[j] && j>0)
-//                 {
-//                   flux[j]=0,kill++,npsfmax--;
-                   //if(j==npsfmax-1)
-                   //  kill++;             
-//                 } 
         }
     }
     npsf = npsf0;
@@ -984,8 +968,8 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
   i = 0;
   for (j=0; j<npsf; j++)
     {      
-      x = (int)(deltaxb[j]+0.4999)+width/2;
-      y = (int)(deltayb[j]+0.4999)+height/2;
+//      x = (int)(deltaxb[j]+0.4999)+width/2;
+//      y = (int)(deltayb[j]+0.4999)+height/2;
 //      if (10*fluxb[j]<fluxb[0] )
 //        continue;
 //      if (fluxb[j]<=0 )
