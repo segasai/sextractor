@@ -51,6 +51,12 @@
 extern keystruct	objkey[];
 extern objstruct	outobj;
 
+static void compute_pos_force(int *pnpsf,int *pconvflag,int *pnpsfflag,double radmin2,
+                         double radmax2,double r2,double *sol,double *flux 
+                        ,double *deltax,double *deltay,double *pdx,double *pdy);
+
+
+
 /********************************* psf_init **********************************/
 /*
 Allocate memory and stuff for the PSF-fitting.
@@ -949,7 +955,7 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
       svdvar(vmat, wmat, npsf, covmat);
       var = covmat;
       for (j=0; j<npsf; j++, var += (npsf+1))
-        /* go over the diagonal of the matrix
+        /* go over the diagonal of the matrix */
         {
 /*---- First, the error on the flux estimate */      
           fluxerr[j] = sqrt(*var)>0.0?  sqrt(*var):999999.0;
