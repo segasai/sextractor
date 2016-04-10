@@ -946,9 +946,10 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
         }
 
 /*-- Compute variances and covariances */
-      svdvar(vmat, wmat, npsf*PSF_NA, covmat);
+      svdvar(vmat, wmat, npsf, covmat);
       var = covmat;
-      for (j=0; j<npsf; j++, var += (npsf*PSF_NA+1)*PSF_NA)
+      for (j=0; j<npsf; j++, var += (npsf+1))
+        /* go over the diagonal of the matrix
         {
 /*---- First, the error on the flux estimate */      
           fluxerr[j] = sqrt(*var)>0.0?  sqrt(*var):999999.0;
