@@ -933,12 +933,13 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
                               psfmasks[j], width, height,
                               -deltax[j]*pixstep, -deltay[j]*pixstep,
                               pixstep);       
-              m=compute_gradient(weight,width,height,
-                                 psfmasks[j],psfmaskx[j],psfmasky[j],m);
+              m=compute_gradient_phot(weight,width,height,
+                                 psfmasks[j],//psfmaskx[j],psfmasky[j],
+                                 m);
             }
           
           
-          svdfit(mat, data, npix, npsf*PSF_NA, sol, vmat, wmat);
+          svdfit(mat, data, npix, npsf, sol, vmat, wmat);
           
           compute_pos_force( &npsf, &convflag, &npsfflag,radmin2,radmax2,
                        r2, sol,flux, deltax, deltay,&dx,&dy);
