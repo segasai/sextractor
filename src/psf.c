@@ -52,8 +52,7 @@ extern keystruct	objkey[];
 extern objstruct	outobj;
 
 static void compute_pos_force(int *pnpsf,int *pconvflag,int *pnpsfflag,double radmin2,
-                         double radmax2,double r2,double *sol,double *flux 
-                        ,double *deltax,double *deltay,double *pdx,double *pdy);
+                         double radmax2,double r2,double *sol,double *flux);
 
 
 
@@ -885,7 +884,6 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
   npsfflag = 1;
   r2 = psf_fwhm*psf_fwhm/2.0;
   //fluxb[0] = fluxerrb[0] = deltaxb[0] = deltayb[0] = 0.0;
-  //for (npsf=1; npsf<=npsfmax && npsfflag; npsf++)
   for (npsf=1; npsf<=npsf0; npsf++)
     {
 /*-- First compute an optimum initial guess for the positions of components */
@@ -914,15 +912,14 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
                               -deltax[j]*pixstep, -deltay[j]*pixstep,
                               pixstep);       
               m=compute_gradient_phot(weight,width,height,
-                                 psfmasks[j],//psfmaskx[j],psfmasky[j],
-                                 m);
+                                 psfmasks[j], m);
             }
           
           
           svdfit(mat, data, npix, npsf, sol, vmat, wmat);
           
           compute_pos_force( &npsf, &convflag, &npsfflag,radmin2,radmax2,
-                       r2, sol,flux, deltax, deltay,&dx,&dy);
+                       r2, sol,flux);
         }
 
 /*-- Compute variances and covariances */
@@ -1575,25 +1572,18 @@ void compute_pos(int *pnpsf,int *pconvflag,int *pnpsfflag,double radmin2,
 
 
 void compute_pos_force(int *pnpsf,int *pconvflag,int *pnpsfflag,double radmin2,
-                         double radmax2,double r2,double *sol,double *flux 
-                        ,double *deltax,double *deltay,double *pdx,double *pdy)
+                         double radmax2,double r2,double *sol,double *flux)
 {
   int j,k,convflag,npsfflag,npsf; 
-  double dx,dy;
-
-  dx=*pdx;
-  dy=*pdy;
   convflag=*pconvflag;
   npsfflag=*pnpsfflag;
   npsf=*pnpsf;
   for (j=0; j<npsf; j++)
     {
-      flux[j] = sol[j*PSF_NA];
+      flux[j] = sol[j];
         convflag = 1;
     }
 
-  *pdx=dx;
-  *pdy=dy;
   *pconvflag=convflag;
   *pnpsfflag= npsfflag;
   *pnpsf=npsf;
