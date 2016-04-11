@@ -788,11 +788,6 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
   thepsfit->niter = 0;
   npsf0 = thepsfit-> npsf;
 
-  for (j=0; j<npsf0; j++) 
-    {
-      thepsfit->flux[j] = 0.0;
-      thepsfit->fluxerr[j] = 0.0;
-    }
 
   /* Scale data area with object "size" */
   ix = (obj->xmax+obj->xmin+1)/2;
@@ -806,6 +801,15 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
   npix = width*height;
   radmin2 = PSF_MINSHIFT*PSF_MINSHIFT;
   radmax2 = npix/2.0;
+
+  for (j=0; j<npsf0; j++) 
+    {
+      thepsfit->flux[j] = 0.0;
+      thepsfit->fluxerr[j] = 0.0;
+      deltax[j] = thepsfit->x[j]-ix-1;
+      deltay[j] = thepsfit->y[j]-iy-1;
+    }
+
 
   /* Scale total area with PSF FWHM */
   pwidth = (int)(psf->masksize[0]*psf->pixstep)+width;;
@@ -886,18 +890,6 @@ void	psf_fit_force(psfstruct *psf, picstruct *field, picstruct *wfield,
   //fluxb[0] = fluxerrb[0] = deltaxb[0] = deltayb[0] = 0.0;
   for (npsf=1; npsf<=npsf0; npsf++)
     {
-/*-- First compute an optimum initial guess for the positions of components */
-      if (npsf>1)
-        {
-          deltax[npsf-1] = thepsfit->x[npsf-1]-ix-1;
-          deltay[npsf-1] = thepsfit->y[npsf-1]-iy-1;
-        }
-      else
-        {
-/*---- Only one component to fit: simply use the barycenter as a guess */
-          deltax[npsf-1] = thepsfit->x[npsf-1]-ix-1;
-          deltay[npsf-1] = thepsfit->y[npsf-1]-iy-1;
-        }
 
       niter = 0;
       convflag = 1;
