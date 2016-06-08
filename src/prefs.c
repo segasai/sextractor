@@ -622,9 +622,8 @@ void	useprefs()
     {
     prefs.psffit_flag = 1;
 /* We deactivate double-PSF fits for now */
-/*
+
     prefs.dpsffit_flag = (prefs.npsf_name>1);
-*/
     }
   if (prefs.check_flag)
     for (i=0; i<prefs.ncheck_type; i++)

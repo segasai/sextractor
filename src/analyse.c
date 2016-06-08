@@ -701,13 +701,11 @@ void	endobject(picstruct *field, picstruct *dfield, picstruct *wfield,
     nsub = 1;
     if (prefs.psffit_flag)
       {
-      if (prefs.dpsffit_flag)
-        double_psf_fit(thepsf, field, wfield, obj, thedpsf, dfield, dwfield);
-      else
-      {
-        psf_fit(thepsf, dfield, dwfield, obj);
+        if (prefs.dpsffit_flag)
+           psf_fit(thedpsf, dfield, dwfield, obj);
+        else
+           psf_fit(thepsf, dfield, dwfield, obj);
         psf_fit_force(thepsf, field, wfield, obj);
-      }
 
       obj2->npsf = thepsfit->npsf;
       nsub = thepsfit->npsf;
